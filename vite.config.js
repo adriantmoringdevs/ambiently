@@ -1,41 +1,41 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/ambiently/',
+  base: "/",
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
+      "/api": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
-      '/sounds': {
-        target: 'http://localhost:5000',
+      "/sounds": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
-      '/signup': {
-        target: 'http://localhost:5000',
+      "/signup": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
-      '/login': {
-        target: 'http://localhost:5000',
+      "/login": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
-      '/logout': {
-        target: 'http://localhost:5000',
+      "/logout": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
-      '/check_session': {
-        target: 'http://localhost:5000',
+      "/check_session": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: false
-      }
-    }
-  }
-})
+        secure: false,
+      },
+    },
+  },
+});
