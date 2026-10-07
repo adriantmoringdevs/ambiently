@@ -20,9 +20,14 @@ app.config['CACHE_TYPE'] = 'SimpleCache'
 app.config['CACHE_DEFAULT_TIMEOUT'] = 3600
 app.json.compact = False
 
-CORS(app, supports_credentials=True, origins=[
-    "https://atmporkandBeans-code.github.io"   # GitHub Pages URL
-])
+CORS(app,
+     origins=[
+         "https://ambiently.onrender.com",
+         "http://localhost:5173",
+     ],
+     supports_credentials=True)
+
+#Render URL
 
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
