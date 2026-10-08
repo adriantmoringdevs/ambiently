@@ -74,4 +74,4 @@ HOW IT WORKS:
 Explore the sound environments from the Home page and click on each to play and set a Timer. The About section provides a brief explanation of the app. The Search page gives access to all Freesound API resources — sounds can be previewed and saved to your account as new Sound Environments. Creating an account persists your saved sounds across sessions.
 
 USAGE NOTE:
-Free Render tier makes first load slow due to backend havinh to spin up on request. 
+Free Neon PostgreSQL tier makes first load slow due to backend havinh to spin up on request. Typically 300 to 500 ms loading time. 
