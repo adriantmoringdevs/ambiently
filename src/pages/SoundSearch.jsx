@@ -1,158 +1,203 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { CircleNotch, MagnifyingGlass, Waveform } from "@phosphor-icons/react";
 import SearchResultCard from "../components/SearchResultCard";
-import AudioPlayer from "../components/AudioPlayer";
 import { useAudio } from "../context/AudioContext";
+import { toTrack } from "../lib/sounds";
 import styles from "../styles/SoundSearch.module.css";
+
+const SKELETON_WIDTHS = ["62%", "48%", "70%"];
 
 function SoundSearch() {
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [sounds, setSounds] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [saveOpenId, setSaveOpenId] = useState(null);
+  const [saveName, setSaveName] = useState("");
+  const [saveError, setSaveError] = useState(null);
   const sentinelRef = useRef(null);
-  const [selectedSound, setSelectedSound] = useState(null);
-  const audioRef = useRef(null);
-  const { savedSounds } = useAudio();
+  const loadingRef = useRef(false);
+  const requestRef = useRef(0);
+  const { savedSounds, addSound } = useAudio();
 
-  // fetches paginated batch of sounds based on page state, hasMore, and query if not empty
+  // fetches a page of 20 sounds for a query; responses from a superseded search are dropped
   const fetchSounds = useCallback(async (searchQuery, pageNum) => {
+    const request = ++requestRef.current;
+    loadingRef.current = true;
     setLoading(true);
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/sounds/search?query=${searchQuery}&page=${pageNum}`,
-    );
-    const data = await res.json();
-
-    setSounds((prev) => [...prev, ...data.results]);
-
-    setHasMore(data.next !== null);
-    setLoading(false);
+    setError(false);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/sounds/search?query=${encodeURIComponent(searchQuery)}&page=${pageNum}`,
+      );
+      if (!res.ok) throw new Error("Search failed");
+      const data = await res.json();
+      if (request !== requestRef.current) return;
+      const tracks = data.results.map((s) => toTrack(s));
+      setSounds((prev) => (pageNum === 1 ? tracks : [...prev, ...tracks]));
+      setCount(data.count ?? 0);
+      setPage(pageNum);
+      setHasMore(data.next !== null);
+    } catch {
+      if (request !== requestRef.current) return;
+      setError(true);
+      setHasMore(false);
+    } finally {
+      if (request === requestRef.current) {
+        loadingRef.current = false;
+        setLoading(false);
+      }
+    }
   }, []);
 
-  const handleSearch = () => {
-    setSubmittedQuery(query);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    setSubmittedQuery(q);
     setSounds([]);
-    setPage(1);
+    setCount(0);
+    setPage(0);
     setHasMore(true);
-
-    if (query) {
-      fetchSounds(submittedQuery, 1);
-    }
+    setSaveOpenId(null);
+    fetchSounds(q, 1);
   };
 
-  // instantiates a new observer for sentinalRef at bottom of page, if it comes in view, it checks hasMore
-  // and loading and sets the new page to + 1, thus achieving a "endless scroll" feel
+  // instantiates a new observer for sentinelRef at bottom of page, if it comes in view, it checks hasMore
+  // and loading and fetches the next page, thus achieving a "endless scroll" feel
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          setPage((prev) => prev + 1);
+        if (entries[0].isIntersecting && hasMore && !loadingRef.current && page > 0) {
+          fetchSounds(submittedQuery, page + 1);
         }
       },
       { threshold: 0.1 },
     );
     if (sentinelRef.current) observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [hasMore, loading]);
+  }, [hasMore, loading, page, submittedQuery, fetchSounds]);
 
-  useEffect(() => {
-    if (page > 1) fetchSounds(query, page);
-  }, [page, fetchSounds]);
+  function openSave(track) {
+    setSaveOpenId(track.id);
+    setSaveName(track.name);
+    setSaveError(null);
+  }
 
-  //   If "Preview Sound clicked on SearchSoundCard, audioplayer automatically starts with sound"
-  useEffect(() => {
-    if (selectedSound) {
-      audioRef.current.play().catch((error) => {
-        console.log("Playback prevented or failed:", error);
-      });
-    }
-  }, [selectedSound]);
+  function cancelSave() {
+    setSaveOpenId(null);
+    setSaveName("");
+    setSaveError(null);
+  }
+
+  function confirmSave(track) {
+    const name = saveName.trim();
+    if (!name) return;
+    addSound(track.id, name)
+      .then(cancelSave)
+      .catch(() => setSaveError("Couldn't save this sound. Try again."));
+  }
+
+  const savedIds = new Set(savedSounds.map((s) => s.freesound_id));
 
   return (
-    <>
+    <div className={styles.page}>
+      <div className={styles.kicker}>The Freesound library</div>
+      <h1 className={styles.title}>Search sounds</h1>
+      <p className={styles.lede}>
+        Preview anything from the community library. Save the ones you love —
+        they become environments on your home page.
+      </p>
 
-      <main className={styles.main}>
-        <div className={styles.glow}></div>
+      <form className={styles.searchRow} onSubmit={handleSearch} role="search">
+        <div className={styles.searchField}>
+          <MagnifyingGlass size={17} />
+          <input
+            type="text"
+            className={styles.input}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search rain, forest, cafe, ocean…"
+            aria-label="Search sounds"
+          />
+        </div>
+        <button type="submit" className={styles.searchBtn}>
+          Search
+        </button>
+      </form>
 
-        <section className={styles.hero}>
-          <span className={styles.badge}>Discover New Soundscapes</span>
-
-          <h1 className={styles.title}>Sound Search</h1>
-
-          <p className={styles.subtitle}>
-            Explore thousands of immersive ambient recordings and find the
-            perfect atmosphere for focus, sleep, meditation, or relaxation.
-          </p>
-
-          <div className={styles.savedContainer}>
-            <span className={styles.savedCount}>
-              Saved Environments:
-              <strong> {savedSounds.length}</strong>
+      {submittedQuery && (
+        <section className={styles.results}>
+          <div className={styles.resultsHead}>
+            <h2 className={styles.resultsTitle}>Results for “{submittedQuery}”</h2>
+            <span className={styles.meta}>
+              {sounds.length} of {count} loaded
+              {hasMore && " · scroll for more"} · {savedSounds.length} saved
             </span>
           </div>
+          <div className={styles.rule} />
 
-          <div className={styles.searchContainer}>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-              placeholder="Search rain, forest, cafe, ocean..."
-              className={styles.searchInput}
-            />
-            <button className={styles.filterButton} onClick={handleSearch}>
-              Search Sounds
-            </button>
-          </div>
-        </section>
-
-        {selectedSound && (
-          <section className={styles.playerSection}>
-            <AudioPlayer
-              previewUrl={selectedSound.previews["preview-hq-mp3"]}
-              audioRef={audioRef}
-            />
-          </section>
-        )}
-
-        <section className={styles.resultsSection}>
-          <div className={styles.resultsHeader}>
-            <h2 className={styles.resultsTitle}>Ambient Results</h2>
-
-            <span className={styles.resultCount}>
-              {sounds.length} sounds found
-            </span>
-          </div>
-
-          <div className={styles.resultsGrid}>
-            {sounds.map((sound) => (
+          <div className={styles.list}>
+            {sounds.map((track) => (
               <SearchResultCard
-                key={sound.id}
-                sound={sound}
-                onPlay={() => setSelectedSound(sound)}
+                key={track.id}
+                track={track}
+                saved={savedIds.has(track.id)}
+                saveOpen={saveOpenId === track.id}
+                saveName={saveName}
+                saveError={saveOpenId === track.id ? saveError : null}
+                onSaveName={setSaveName}
+                onOpenSave={() => openSave(track)}
+                onConfirmSave={() => confirmSave(track)}
+                onCancelSave={cancelSave}
               />
             ))}
           </div>
 
           {loading && (
-            <div className={styles.loading}>
-              <div className={styles.loader}></div>
-              <p>Loading environments...</p>
+            <div className={styles.list} aria-live="polite">
+              {SKELETON_WIDTHS.map((w) => (
+                <div key={w} className={styles.skeletonRow}>
+                  <span className={styles.skCircle} />
+                  <div className={styles.skText}>
+                    <span className={styles.skLine} style={{ width: w }} />
+                    <span className={styles.skSub} />
+                  </div>
+                  <span className={styles.skTags} />
+                  <span className={styles.skDur} />
+                  <span className={styles.skBtn} />
+                </div>
+              ))}
+              <div className={styles.loadingNote}>
+                <CircleNotch size={16} className={styles.spin} />
+                {page === 0 ? "Searching Freesound…" : "Loading the next 20 sounds…"}
+              </div>
             </div>
           )}
 
-          {!hasMore && sounds.length > 0 && (
-            <p className={styles.endMessage}>
-              You’ve reached the end of the soundscape.
-            </p>
+          {error && !loading && (
+            <p className={styles.note}>Something went wrong reaching Freesound. Try searching again.</p>
           )}
 
-          <div ref={sentinelRef} />
+          {!loading && !error && sounds.length === 0 && (
+            <p className={styles.note}>No sounds found for “{submittedQuery}”.</p>
+          )}
+
+          {!hasMore && !loading && sounds.length > 0 && (
+            <div className={styles.end}>
+              <Waveform size={20} className={styles.endIcon} />
+              You've reached the end of the soundscape.
+            </div>
+          )}
         </section>
-      </main>
-    </>
+      )}
+
+      <div ref={sentinelRef} className={styles.sentinel} />
+    </div>
   );
 }
 

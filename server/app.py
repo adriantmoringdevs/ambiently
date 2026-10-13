@@ -137,7 +137,7 @@ class SoundSearch(Resource):
         params = {
             "page": page,
             "page_size": 20,
-            "fields": "id,name,duration,previews,images,avg_rating",
+            "fields": "id,name,duration,tags,username,previews,images,avg_rating",
             "token": token
         }
 
