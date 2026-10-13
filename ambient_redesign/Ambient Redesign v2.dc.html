@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nocturne-edfa347f-de86-435d-9be0-aad643f8dc08/styles.css">
+<script src="_ds/nocturne-edfa347f-de86-435d-9be0-aad643f8dc08/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif&family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Manrope:wght@400;500;600&family=DM+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+html,body{margin:0;padding:0;background:#101114}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+input::placeholder{color:var(--muted);opacity:.8}
+button{font:inherit}
+</style>
+</helmet>
+
+<div style="{{ themeVars }}">
+<div style="min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:var(--fb);font-size:15px;line-height:1.55">
+
+<sc-if value="{{ showControls }}" hint-placeholder-val="{{ true }}">
+<div style="background:#101114;color:#c9c9cf;font-family:'Inter',sans-serif;border-bottom:1px solid #26272d">
+  <div style="max-width:1224px;margin:0 auto;padding:10px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
+    <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a8b94">Fonts</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <sc-for list="{{ fontOpts }}" as="fo" hint-placeholder-count="6">
+        <button onClick="{{ fo.onPick }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:6px 10px;border-radius:8px;cursor:pointer;color:#e6e6ea;line-height:1.15;white-space:nowrap;border:{{ fo.border }};background:{{ fo.bg }}">
+          <span style="font-size:15px;font-family:{{ fo.fh }};font-weight:{{ fo.hw }}">{{ fo.headName }}</span>
+          <span style="font-size:10px;color:#8a8b94;font-family:{{ fo.fm }}">{{ fo.rest }}</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;gap:4px;padding:3px;border:1px solid #26272d;border-radius:8px">
+      <sc-for list="{{ screenTabs }}" as="s" hint-placeholder-count="4">
+        <button onClick="{{ s.onPick }}" style="padding:6px 12px;border:0;border-radius:6px;cursor:pointer;font-size:12px;color:{{ s.color }};background:{{ s.bg }}">{{ s.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<header style="position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter:blur(12px)">
+  <div style="max-width:1224px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:28px">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-right:auto">
+      <svg width="30" height="30" viewBox="0 0 46 46"><circle cx="23" cy="23" r="22" fill="none" stroke-width="1" style="stroke:var(--accent);opacity:.45"></circle><circle cx="23" cy="23" r="16" style="fill:var(--accent)"></circle><g transform="translate(21,23)" style="fill:var(--bg)"><rect x="-13" y="-3.5" width="3" height="7" rx="1.5" opacity="0.5"></rect><rect x="-8.5" y="-6.5" width="3" height="13" rx="1.5" opacity="0.7"></rect><rect x="-4" y="-8.5" width="3" height="17" rx="1.5" opacity="0.85"></rect><rect x="0.5" y="-10.5" width="3" height="21" rx="1.5"></rect><rect x="5" y="-8.5" width="3" height="17" rx="1.5" opacity="0.85"></rect><rect x="9.5" y="-6.5" width="3" height="13" rx="1.5" opacity="0.7"></rect><rect x="14" y="-3.5" width="3" height="7" rx="1.5" opacity="0.5"></rect></g></svg>
+      <span style="font-family:var(--fh);font-weight:var(--hw);font-size:21px;letter-spacing:.01em">Ambient</span>
+    </div>
+    <nav style="display:flex;gap:4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <a onClick="{{ n.onPick }}" style="position:relative;padding:8px 12px;font-size:14px;cursor:pointer;color:{{ n.color }}">{{ n.label }}<span style="position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:2px;background:var(--accent);opacity:{{ n.mark }}"></span></a>
+      </sc-for>
+    </nav>
+    <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--bg);background:var(--accent2)">A</span>{{ user }}</span>
+        <button onClick="{{ logout }}" style="background:transparent;border:0;color:var(--muted);font-size:13px;cursor:pointer;padding:6px 8px;border-radius:6px" style-hover="color:var(--text)">Log out</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ goLogin }}" style="height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;font-size:14px;cursor:pointer" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)">Sign in</button>
+    </sc-if>
+  </div>
+  <div style="height:1px;background:linear-gradient(to right, transparent, var(--line) 48px, var(--line) calc(100% - 48px), transparent)"></div>
+</header>
+
+<main style="flex:1;width:100%">
+
+<!-- HOME -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Home" style="max-width:1224px;margin:0 auto;padding:56px 32px 0">
+  <section ref="{{ heroRef }}" style="position:sticky;top:96px;z-index:0;max-width:640px;transform-origin:left top;will-change:transform,opacity">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px">Soundscapes for study, sleep &amp; focus</div>
+    <h1 style="font-family:var(--fh);font-weight:var(--hw);font-size:clamp(40px,5.2vw,60px);line-height:1.04;letter-spacing:-.02em;margin:0 0 18px;text-wrap:balance">Step into a sound. Let the room disappear.</h1>
+    <p style="margin:0 0 28px;color:var(--muted);font-size:16px;text-wrap:pretty">Each environment is a looping Freesound recording with a scene to match — and a sleep timer that stops it when you're done.</p>
+    <div style="display:flex;align-items:center;gap:12px;max-width:520px">
+      <div style="flex:1;position:relative">
+        <i class="ph ph-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:17px"></i>
+        <input value="{{ filter }}" onChange="{{ onFilter }}" placeholder="Filter environments" style="width:100%;height:44px;padding:0 14px 0 40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-family:var(--fb);font-size:14px;outline:none">
+      </div>
+      <span style="font-size:12px;color:var(--muted);white-space:nowrap">{{ envCount }}</span>
+    </div>
+  </section>
+
+  <div style="position:relative;z-index:2;margin-top:72px;padding:12px 0 64px;background:var(--bg);box-shadow:0 -48px 48px var(--bg)">
+  <section>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px">
+      <h2 style="font-family:var(--fh);font-weight:var(--hw);font-size:28px;margin:0;letter-spacing:-.01em">Environments</h2>
+      <span style="font-size:12px;color:var(--muted)">Curated · 8 spaces</span>
+    </div>
+    <div style="height:1px;margin-bottom:24px;background:linear-gradient(to right, transparent, var(--line) 48px, var(--line) calc(100% - 48px), transparent)"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));grid-auto-rows:190px;grid-auto-flow:dense;gap:14px">
+      <sc-for list="{{ tiles }}" as="e" hint-placeholder-count="8">
+        <div onClick="{{ e.onOpen }}" style="position:relative;overflow:hidden;border-radius:12px;padding:{{ e.pad }};display:flex;flex-direction:column;cursor:pointer;grid-column:{{ e.span }};grid-row:{{ e.span }};background:linear-gradient(160deg, {{ e.tint }} 0%, var(--surface) 85%);box-shadow:{{ e.ring }};transition:box-shadow .2s, transform .2s" style-hover="transform:translateY(-2px);box-shadow:0 0 0 1px var(--accent)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="width:{{ e.iconBox }};height:{{ e.iconBox }};border-radius:50%;display:grid;place-items:center;font-size:{{ e.iconSize }};color:var(--text);background:color-mix(in srgb, var(--text) 9%, transparent)"><i class="ph {{ e.icon }}"></i></span>
+            <sc-if value="{{ e.featured }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:6px;color:var(--color-accent-100);background:var(--color-accent-800)"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>{{ featuredLabel }}</span></sc-if>
+          </div>
+          <div style="flex:1"></div>
+          <div style="font-family:var(--fh);font-weight:var(--hw);line-height:1.08;letter-spacing:-.015em;font-size:{{ e.nameSize }}">{{ e.name }}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px">by {{ e.by }}</div>
+          <sc-if value="{{ e.featured }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:16px">
+              <sc-for list="{{ e.tagList }}" as="tg" hint-placeholder-count="4"><span style="font-size:11px;padding:3px 9px;border-radius:6px;background:color-mix(in srgb, var(--text) 9%, transparent);color:var(--color-neutral-300)">#{{ tg.t }}</span></sc-for>
+              <span style="flex:1"></span>
+              <span style="display:flex;flex:none;white-space:nowrap;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:8px;border:1px solid var(--accent);color:var(--accent);font-weight:500;font-size:14px">Enter environment <i class="ph ph-arrow-right"></i></span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <sc-if value="{{ showMoreTile }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ goSearch }}" style="border-radius:12px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:1px dashed var(--line);color:var(--muted)" style-hover="color:var(--text);border-color:var(--accent)">
+          <i class="ph ph-plus" style="font-size:20px"></i>
+          <div><div style="font-family:var(--fh);font-weight:var(--hw);font-size:18px;color:var(--text)">Find more sounds</div><div style="font-size:13px">Search the Freesound library</div></div>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ noEnvs }}" hint-placeholder-val="{{ false }}"><p style="color:var(--muted);margin:8px 0 0">No environments match “{{ filter }}”.</p></sc-if>
+  </section>
+
+  <section style="margin-top:64px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px">
+      <h2 style="font-family:var(--fh);font-weight:var(--hw);font-size:28px;margin:0;letter-spacing:-.01em">Your saved sounds</h2>
+      <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;color:var(--muted)">{{ savedCount }} saved</span></sc-if>
+    </div>
+    <div style="height:1px;margin-bottom:24px;background:linear-gradient(to right, transparent, var(--line) 48px, var(--line) calc(100% - 48px), transparent)"></div>
+    <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
+        <sc-for list="{{ savedTiles }}" as="e" hint-placeholder-count="2">
+          <div onClick="{{ e.onOpen }}" style="height:120px;border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;background:{{ e.tint }};box-shadow:{{ e.ring }}" style-hover="box-shadow:0 0 0 1px var(--accent)">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <i class="ph {{ e.icon }}" style="font-size:20px;color:var(--color-neutral-200)"></i>
+              <span style="font-size:11px;color:var(--color-neutral-300)">{{ e.catLabel }}</span>
+            </div>
+            <div style="min-width:0">
+              <div style="font-family:var(--fh);font-weight:var(--hw);font-size:18px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ e.name }}</div>
+              <div style="font-size:12px;color:var(--color-neutral-300)">by {{ e.by }} · {{ e.durLabel }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;border-radius:10px;box-shadow:0 0 0 1px var(--line)">
+        <div><div style="font-family:var(--fh);font-weight:var(--hw);font-size:20px">Keep the sounds you find.</div><div style="color:var(--muted);font-size:14px">Sign in to save Freesound recordings as your own environments.</div></div>
+        <button onClick="{{ goLogin }}" style="height:40px;padding:0 18px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;cursor:pointer" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)">Sign in or create account</button>
+      </div>
+    </sc-if>
+  </section>
+  </div>
+</div>
+</sc-if>
+
+<!-- ENVIRONMENT -->
+<sc-if value="{{ isEnv }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Sound Environment" style="max-width:1224px;margin:0 auto;padding:24px 32px 64px">
+  <a onClick="{{ goHome }}" style="display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;cursor:pointer;margin-bottom:18px" style-hover="color:var(--text)"><i class="ph ph-arrow-left"></i>All environments</a>
+
+  <section style="position:relative;height:clamp(340px,54vh,540px);border-radius:16px;overflow:hidden;background:var(--surface);box-shadow:0 0 0 1px var(--line)">
+    <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(14,15,24,.88) 0%, rgba(14,15,24,.35) 38%, rgba(14,15,24,0) 62%);pointer-events:none"></div>
+    <div style="position:absolute;top:18px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-200);padding:5px 10px;border-radius:6px;background:rgba(14,15,24,.45);backdrop-filter:blur(6px)">{{ sceneKicker }}</span>
+      <span style="display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 10px;border-radius:6px;background:rgba(14,15,24,.45);backdrop-filter:blur(6px);color:var(--color-neutral-200)"><span style="width:6px;height:6px;border-radius:50%;background:{{ sceneDot }}"></span>{{ sceneState }}</span>
+    </div>
+    <div style="position:absolute;left:28px;right:28px;bottom:26px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px">
+      <div style="min-width:0">
+        <h1 style="font-family:var(--fh);font-weight:var(--hw);font-size:clamp(44px,6vw,84px);line-height:1;letter-spacing:-.025em;margin:0 0 10px;color:var(--text)">{{ cur.name }}</h1>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px">
+          <span style="color:var(--color-neutral-200);font-size:14px">Recorded by {{ cur.by }}</span>
+          <sc-for list="{{ curTags }}" as="tg" hint-placeholder-count="4"><span style="font-size:11px;padding:3px 9px;border-radius:6px;background:rgba(233,233,237,.1);color:var(--color-neutral-200)">#{{ tg.t }}</span></sc-for>
+        </div>
+      </div>
+      <button onClick="{{ togglePlay }}" aria-label="Play or pause" style="width:72px;height:72px;flex:none;border-radius:50%;border:1px solid var(--accent);background:rgba(14,15,24,.45);backdrop-filter:blur(6px);color:var(--accent);display:grid;place-items:center;cursor:pointer;font-size:28px" style-hover="background:color-mix(in srgb, var(--accent) 18%, rgba(14,15,24,.6))"><i class="ph-fill {{ playIcon }}"></i></button>
+    </div>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px;align-items:stretch;margin-top:20px">
+    <div style="background:var(--surface);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:20px;box-shadow:0 0 0 1px var(--line)">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2 style="font-family:var(--fh);font-weight:var(--hw);font-size:22px;margin:0">Playback</h2>
+        <span style="font-family:var(--fm);font-size:13px;color:var(--muted)"><span style="color:var(--text)">{{ posLabel }}</span> / {{ durLabel }}</span>
+      </div>
+      <div style="display:flex;align-items:end;gap:3px;height:72px;cursor:pointer">
+        <sc-for list="{{ bigBars }}" as="b" hint-placeholder-count="64"><span onClick="{{ b.onSeek }}" style="flex:1;border-radius:2px;height:{{ b.h }};background:{{ b.c }}" style-hover="opacity:.7"></span></sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button onClick="{{ toggleLoop }}" style="display:flex;white-space:nowrap;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:8px;cursor:pointer;font-size:13px;background:transparent;border:1px solid var(--line);color:{{ loopColor }}"><i class="ph ph-repeat"></i>{{ loopLabel }}</button>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:8px;color:var(--muted)"><i class="ph ph-speaker-simple-high" style="font-size:17px"></i><input type="range" min="0" max="100" value="{{ vol }}" onChange="{{ onVol }}" style="width:130px;accent-color:var(--accent)"></div>
+      </div>
+      <p style="margin:0;font-size:13px;color:var(--muted)">The scene comes alive while the sound plays and rests when it stops. Playback continues in the bar below as you browse.</p>
+    </div>
+
+    <div style="background:var(--surface);border-radius:14px;padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;align-items:center;box-shadow:0 0 0 1px var(--line)">
+      <div style="position:relative;width:200px;height:200px;justify-self:center">
+        <svg width="200" height="200" viewBox="0 0 260 260" style="transform:rotate(-90deg)">
+          <circle cx="130" cy="130" r="112" fill="none" stroke-width="2" style="stroke:var(--line)"></circle>
+          <circle cx="130" cy="130" r="112" fill="none" stroke-width="7" stroke-linecap="round" stroke-dasharray="703.7" stroke-dashoffset="{{ ringOffset }}" style="stroke:var(--accent);transition:stroke-dashoffset 1s linear"></circle>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+          <sc-if value="{{ timerDone }}" hint-placeholder-val="{{ false }}">
+            <i class="ph ph-moon-stars" style="font-size:30px;color:var(--accent)"></i>
+            <div style="font-size:14px;font-weight:500">Session complete</div>
+          </sc-if>
+          <sc-if value="{{ timerNotDone }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:var(--fm);font-size:42px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums">{{ timerLabel }}</div>
+            <div style="font-size:12px;color:var(--muted)">{{ timerSub }}</div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <h2 style="font-family:var(--fh);font-weight:var(--hw);font-size:22px;margin:0;white-space:nowrap">Sleep timer</h2>
+          <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:6px;color:{{ timerTagColor }};background:color-mix(in srgb, var(--text) 7%, transparent)">{{ timerTag }}</span>
+        </div>
+        <sc-if value="{{ timerIdle }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <button onClick="{{ minus5 }}" aria-label="Minus 5 minutes" style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;display:grid;place-items:center"><i class="ph ph-minus"></i></button>
+              <sc-for list="{{ presets }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.onPick }}" style="height:34px;padding:0 11px;border-radius:8px;cursor:pointer;font-family:var(--fm);font-size:12px;background:transparent;border:1px solid {{ p.border }};color:{{ p.color }}">{{ p.label }}</button>
+              </sc-for>
+              <button onClick="{{ plus5 }}" aria-label="Plus 5 minutes" style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;display:grid;place-items:center"><i class="ph ph-plus"></i></button>
+            </div>
+            <button onClick="{{ startTimer }}" style="height:42px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)"><i class="ph ph-timer"></i>Start timer</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ timerActive }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <button onClick="{{ pauseTimer }}" style="height:42px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;cursor:pointer" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)">{{ pauseLabel }}</button>
+            <button onClick="{{ cancelTimer }}" style="height:42px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:500;cursor:pointer" style-hover="background:color-mix(in srgb, var(--text) 7%, transparent)">Cancel</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ timerDone }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ cancelTimer }}" style="height:42px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:500;cursor:pointer">Dismiss</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- SEARCH -->
+<sc-if value="{{ isSearch }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Search" style="max-width:1224px;margin:0 auto;padding:56px 32px 64px">
+  <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px">The Freesound library</div>
+  <h1 style="font-family:var(--fh);font-weight:var(--hw);font-size:clamp(40px,5vw,60px);line-height:1.04;letter-spacing:-.02em;margin:0 0 14px">Search sounds</h1>
+  <p style="margin:0 0 28px;max-width:560px;color:var(--muted);font-size:16px">Preview anything from the community library. Save the ones you love — they become environments on your home page.</p>
+  <div style="display:flex;gap:10px;max-width:720px;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px;position:relative">
+      <i class="ph ph-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:17px"></i>
+      <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search rain, forest, cafe, ocean…" style="width:100%;height:48px;padding:0 14px 0 40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-family:var(--fb);font-size:15px;outline:none">
+    </div>
+    <button onClick="{{ runSearch }}" style="height:48px;padding:0 22px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;cursor:pointer" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)">Search</button>
+  </div>
+  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:56px 0 12px;flex-wrap:wrap">
+    <h2 style="font-family:var(--fh);font-weight:var(--hw);font-size:24px;margin:0">Results for “{{ submitted }}”</h2>
+    <span style="font-size:12px;color:var(--muted)">{{ loadedLabel }} of 236 loaded · scroll for more · {{ savedCount }} saved</span>
+  </div>
+  <div style="height:1px;background:linear-gradient(to right, transparent, var(--line) 48px, var(--line) calc(100% - 48px), transparent)"></div>
+  <div style="display:flex;flex-direction:column">
+    <sc-for list="{{ results }}" as="r" hint-placeholder-count="20">
+      <div style="display:flex;flex-direction:column;border-radius:8px;background:{{ r.rowBg }}">
+        <div style="display:grid;grid-template-columns:40px minmax(0,2fr) minmax(0,1.3fr) 56px 136px;align-items:center;gap:16px;padding:12px 10px">
+          <button onClick="{{ r.onPlay }}" aria-label="Preview" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--accent);background:{{ r.btnBg }};color:var(--accent);display:grid;place-items:center;cursor:pointer;font-size:14px"><i class="ph-fill {{ r.icon }}"></i></button>
+          <div style="min-width:0">
+            <div style="font-size:15px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</div>
+            <div style="font-size:12px;color:var(--muted)">by {{ r.by }}</div>
+          </div>
+          <div style="display:flex;gap:6px;overflow:hidden">
+            <sc-for list="{{ r.tagList }}" as="tg" hint-placeholder-count="2"><span style="font-size:11px;padding:3px 8px;border-radius:6px;white-space:nowrap;background:color-mix(in srgb, var(--text) 7%, transparent);color:var(--muted)">#{{ tg.t }}</span></sc-for>
+          </div>
+          <span style="font-family:var(--fm);font-size:12px;color:var(--muted);text-align:right">{{ r.durLabel }}</span>
+          <button onClick="{{ r.onSave }}" style="height:34px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid var(--line);color:{{ r.saveColor }}" style-hover="background:color-mix(in srgb, var(--text) 7%, transparent)"><i class="{{ r.saveIcon }}"></i>{{ r.saveLabel }}</button>
+        </div>
+        <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:0 10px 14px 66px">
+            <input value="{{ saveName }}" onChange="{{ onSaveName }}" placeholder="Name this environment…" style="flex:1;min-width:200px;max-width:360px;height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--accent);background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;outline:none">
+            <button onClick="{{ confirmSave }}" style="height:38px;padding:0 16px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;cursor:pointer">Save to my sounds</button>
+            <button onClick="{{ cancelSave }}" style="height:38px;padding:0 12px;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer">Cancel</button>
+          </div>
+        </sc-if>
+        <div style="height:1px;background:linear-gradient(to right, transparent, color-mix(in srgb, var(--text) 8%, transparent) 48px, color-mix(in srgb, var(--text) 8%, transparent) calc(100% - 48px), transparent)"></div>
+      </div>
+    </sc-for>
+  </div>
+  <sc-if value="{{ loadingMore }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ skeletons }}" as="sk" hint-placeholder-count="3">
+        <div style="display:grid;grid-template-columns:40px minmax(0,2fr) minmax(0,1.3fr) 56px 136px;align-items:center;gap:16px;padding:12px 10px">
+          <span style="width:36px;height:36px;border-radius:50%;background:color-mix(in srgb, var(--text) 7%, transparent)"></span>
+          <div style="display:flex;flex-direction:column;gap:6px"><span style="height:12px;width:{{ sk.w }};border-radius:4px;background:color-mix(in srgb, var(--text) 9%, transparent)"></span><span style="height:9px;width:30%;border-radius:4px;background:color-mix(in srgb, var(--text) 6%, transparent)"></span></div>
+          <span style="height:18px;width:60%;border-radius:6px;background:color-mix(in srgb, var(--text) 6%, transparent)"></span>
+          <span style="height:10px;border-radius:4px;background:color-mix(in srgb, var(--text) 6%, transparent)"></span>
+          <span style="height:34px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)"></span>
+        </div>
+      </sc-for>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 0 4px;font-size:13px;color:var(--muted)"><i class="ph ph-circle-notch" style="font-size:16px;color:var(--accent)"></i>Loading the next 20 sounds…</div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ reachedEnd }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:36px 0 8px;color:var(--muted);font-size:13px">
+      <i class="ph ph-waveform" style="font-size:20px;color:var(--accent)"></i>
+      You've reached the end of the soundscape.
+    </div>
+  </sc-if>
+  <div ref="{{ sentinelRef }}" style="height:1px"></div>
+</div>
+</sc-if>
+
+<!-- LOGIN -->
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Login" style="max-width:1224px;margin:0 auto;padding:40px 32px;min-height:calc(100vh - 140px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:48px;align-items:center">
+  <div style="display:flex;flex-direction:column;gap:24px">
+    <svg width="112" height="112" viewBox="0 0 46 46"><circle cx="23" cy="23" r="22" fill="none" stroke-width="0.5" style="stroke:var(--accent);opacity:.45"></circle><circle cx="23" cy="23" r="16" style="fill:var(--accent)"></circle><g transform="translate(21,23)" style="fill:var(--bg)"><rect x="-13" y="-3.5" width="3" height="7" rx="1.5" opacity="0.5"></rect><rect x="-8.5" y="-6.5" width="3" height="13" rx="1.5" opacity="0.7"></rect><rect x="-4" y="-8.5" width="3" height="17" rx="1.5" opacity="0.85"></rect><rect x="0.5" y="-10.5" width="3" height="21" rx="1.5"></rect><rect x="5" y="-8.5" width="3" height="17" rx="1.5" opacity="0.85"></rect><rect x="9.5" y="-6.5" width="3" height="13" rx="1.5" opacity="0.7"></rect><rect x="14" y="-3.5" width="3" height="7" rx="1.5" opacity="0.5"></rect></g></svg>
+    <h1 style="font-family:var(--fh);font-weight:var(--hw);font-size:clamp(40px,5vw,60px);line-height:1.04;letter-spacing:-.02em;margin:0;max-width:480px;text-wrap:balance">Put on a soundscape. Breathe deeper. Stay awhile.</h1>
+    <p style="margin:0;color:var(--muted);max-width:420px">An account keeps your saved Freesound recordings with you across sessions.</p>
+  </div>
+  <div style="justify-self:center;width:100%;max-width:400px;background:var(--surface);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:18px;box-shadow:0 0 0 1px var(--line), 0 16px 40px rgba(0,0,0,.35)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden">
+      <button onClick="{{ setLogin }}" style="height:38px;border:0;cursor:pointer;font-size:14px;font-weight:500;background:transparent;color:{{ loginTabColor }};box-shadow:{{ loginTabRing }}">Log in</button>
+      <button onClick="{{ setSignup }}" style="height:38px;border:0;cursor:pointer;font-size:14px;font-weight:500;background:transparent;color:{{ signupTabColor }};box-shadow:{{ signupTabRing }}">Sign up</button>
+    </div>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)">Username
+      <input value="{{ user }}" onChange="{{ onUser }}" style="height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;outline:none">
+    </label>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)">Password
+      <input type="password" value="ambientpass1" style="height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;outline:none">
+    </label>
+    <button onClick="{{ submitAuth }}" style="height:46px;margin-top:4px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;font-size:15px;cursor:pointer" style-hover="background:color-mix(in srgb, var(--accent) 12%, transparent)">{{ authCta }}</button>
+    <p style="margin:0;font-size:12px;color:var(--muted);text-align:center">{{ authNote }}</p>
+  </div>
+</div>
+</sc-if>
+</main>
+
+<sc-if value="{{ showMini }}" hint-placeholder-val="{{ true }}">
+<div style="position:sticky;bottom:0;z-index:20;background:color-mix(in srgb, var(--surface) 94%, transparent);backdrop-filter:blur(12px);box-shadow:0 -1px 0 var(--line)">
+  <div style="position:relative;height:2px;background:color-mix(in srgb, var(--text) 8%, transparent)"><div style="position:absolute;left:0;top:0;bottom:0;background:var(--accent);width:{{ progressPct }}"></div></div>
+  <div style="max-width:1224px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:14px">
+    <button onClick="{{ togglePlay }}" aria-label="Play or pause" style="width:40px;height:40px;flex:none;border-radius:50%;border:1px solid var(--accent);background:transparent;color:var(--accent);display:grid;place-items:center;cursor:pointer;font-size:16px"><i class="ph-fill {{ playIcon }}"></i></button>
+    <span style="width:36px;height:36px;flex:none;border-radius:8px;display:grid;place-items:center;font-size:17px;color:var(--color-neutral-200);background:{{ curTint }}"><i class="ph {{ curIcon }}"></i></span>
+    <div onClick="{{ goEnv }}" style="min-width:0;cursor:pointer">
+      <div style="font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cur.name }}</div>
+      <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">by {{ cur.by }}</div>
+    </div>
+    <span style="font-family:var(--fm);font-size:12px;color:var(--muted);margin-left:8px;white-space:nowrap">{{ posLabel }} / {{ durLabel }}</span>
+    <div style="flex:1"></div>
+    <button onClick="{{ goEnv }}" style="display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:8px;cursor:pointer;font-size:13px;background:transparent;border:1px solid var(--line);color:{{ miniTimerColor }};font-family:var(--fm)"><i class="ph ph-timer" style="font-size:15px"></i>{{ miniTimer }}</button>
+    <button onClick="{{ toggleLoop }}" aria-label="Loop" style="width:34px;height:34px;border-radius:8px;cursor:pointer;background:transparent;border:0;color:{{ loopColor }};display:grid;place-items:center;font-size:17px"><i class="ph ph-repeat"></i></button>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;env&quot;,&quot;search&quot;,&quot;login&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fontPair&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;inter&quot;,&quot;geist&quot;,&quot;instrument&quot;,&quot;sora&quot;,&quot;newsreader&quot;,&quot;bricolage&quot;],&quot;default&quot;:&quot;bricolage&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Type&quot;},&quot;heroEffect&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sticky + parallax&quot;,&quot;sticky&quot;,&quot;none&quot;],&quot;default&quot;:&quot;sticky + parallax&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Home&quot;},&quot;intensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0.4,&quot;max&quot;:1.6,&quot;step&quot;:0.1,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scenes&quot;},&quot;animateWhenPaused&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scenes&quot;},&quot;showControls&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const VARS = {
+  '--bg': 'var(--color-bg)', '--surface': 'var(--color-surface)', '--text': 'var(--color-text)', '--accent': 'var(--color-accent)',
+  '--accent2': 'var(--color-neutral-400)', '--muted': 'var(--color-neutral-400)', '--line': 'var(--color-divider)',
+  '--fh': '"Inter", system-ui, sans-serif', '--fb': '"Inter", system-ui, sans-serif', '--fm': '"JetBrains Mono", ui-monospace, monospace',
+};
+const FONT_PAIRS = [
+  { key: 'inter', headName: 'Inter', rest: 'Inter · JetBrains Mono', fh: '"Inter", system-ui, sans-serif', fb: '"Inter", system-ui, sans-serif', fm: '"JetBrains Mono", ui-monospace, monospace', hw: '500' },
+  { key: 'geist', headName: 'Geist', rest: 'Geist · Geist Mono', fh: '"Geist", system-ui, sans-serif', fb: '"Geist", system-ui, sans-serif', fm: '"Geist Mono", ui-monospace, monospace', hw: '500' },
+  { key: 'instrument', headName: 'Instrument Serif', rest: 'Geist · Geist Mono', fh: '"Instrument Serif", Georgia, serif', fb: '"Geist", system-ui, sans-serif', fm: '"Geist Mono", ui-monospace, monospace', hw: '400' },
+  { key: 'sora', headName: 'Sora', rest: 'Sora · IBM Plex Mono', fh: '"Sora", system-ui, sans-serif', fb: '"Sora", system-ui, sans-serif', fm: '"IBM Plex Mono", ui-monospace, monospace', hw: '500' },
+  { key: 'newsreader', headName: 'Newsreader', rest: 'Manrope · DM Mono', fh: '"Newsreader", Georgia, serif', fb: '"Manrope", system-ui, sans-serif', fm: '"DM Mono", ui-monospace, monospace', hw: '400' },
+  { key: 'bricolage', headName: 'Bricolage Grotesque', rest: 'Bricolage · Spline Sans Mono', fh: '"Bricolage Grotesque", system-ui, sans-serif', fb: '"Bricolage Grotesque", system-ui, sans-serif', fm: '"Spline Sans Mono", ui-monospace, monospace', hw: '500' },
+];
+const ENVS = [
+  { id: 'rain', name: 'Rain', by: 'lebaston100', tags: ['nature', 'rain', 'rainfall', 'shower'], dur: 240 },
+  { id: 'fireplace', name: 'Fireplace', by: 'dobroide', tags: ['burning', 'chimney', 'country', 'crackle', 'crackling', 'field-recording'], dur: 182 },
+  { id: 'beach', name: 'Beach', by: 'Kyster', tags: ['beach', 'big-waves', 'coast', 'coastline'], dur: 214 },
+  { id: 'crickets', name: 'Crickets', by: 'alemarino', tags: ['Brazil', 'Itatiba', 'Sao-Paulo', 'alreves'], dur: 198 },
+  { id: 'birds', name: 'Birds', by: 'diegofdelcorralg', tags: ['ambiance', 'ambient', 'america', 'beach'], dur: 256 },
+  { id: 'thunder', name: 'Thunderstorm', by: 'vilmuhametshin', tags: ['field-recording', 'nature', 'night', 'rain'], dur: 301 },
+  { id: 'stream', name: 'Stream', by: 'Soundrack', tags: ['24', '96kHz', 'Argentina', 'Bits'], dur: 175 },
+  { id: 'desert', name: 'Desert Wind', by: 'felix.blume', tags: ['CAM120203T004', 'atacama', 'blow', 'blowing'], dur: 220 },
+];
+const SCENE_OF = { rain: 'rain', fireplace: 'fire', beach: 'beach', crickets: 'night', birds: 'birds', thunder: 'thunder', stream: 'stream', desert: 'desert' };
+const SAVED = [
+  { id: 'forest', name: 'Forest Sounds', by: 'klankbeeld', tags: ['Giersbergen', 'March', 'Netherlands', 'North-Brabant'], dur: 263 },
+  { id: 'white', name: 'White Noise', by: 'KarlFaktor', tags: ['noise', 'stationary', 'stereo', 'white'], dur: 120 },
+];
+const CATS = {
+  thunder: { re: /thunder|storm|lightning/, tint: '#2f3648', icon: 'ph-cloud-lightning', label: 'Storm' },
+  rain: { re: /rain|shower|drizzle|drip|monsoon|cloudburst|gutter|puddle/, tint: '#33415a', icon: 'ph-cloud-rain', label: 'Rain' },
+  fire: { re: /fire|burn|crackl|ember|chimney/, tint: '#4d3529', icon: 'ph-fire', label: 'Fire' },
+  night: { re: /cricket|insect|night/, tint: '#29324a', icon: 'ph-moon-stars', label: 'Night' },
+  birds: { re: /bird|dawn|chirp/, tint: '#3b3f37', icon: 'ph-bird', label: 'Birds' },
+  forest: { re: /forest|tree|wood|leaves|pine/, tint: '#2f4235', icon: 'ph-tree', label: 'Forest' },
+  stream: { re: /stream|river|creek|lake|water/, tint: '#2a4340', icon: 'ph-drop', label: 'Water' },
+  desert: { re: /desert|wind|sand|atacama|blow/, tint: '#4c4035', icon: 'ph-wind', label: 'Wind' },
+  beach: { re: /beach|coast|wave|ocean|sea/, tint: '#2a4150', icon: 'ph-waves', label: 'Sea' },
+  noise: { re: /noise|static|white/, tint: '#383a46', icon: 'ph-waveform', label: 'Noise' },
+};
+const OTHER = { tint: '#323449', icon: 'ph-waveform', label: 'Sound' };
+function catOf(s) {
+  if (SCENE_OF[s.id]) return CATS[SCENE_OF[s.id]];
+  const txt = (s.name + ' ' + s.tags.join(' ')).toLowerCase();
+  for (const k in CATS) if (CATS[k].re.test(txt)) return CATS[k];
+  return OTHER;
+}
+const NAMES = ['Rain on tin roof', 'Light rain against window', 'Heavy rain, city street', 'Rain in pine forest', 'Cloudburst', 'Drizzle on leaves', 'Rain under umbrella', 'Thunder and rain, distant', 'Rain on car roof', 'Gutter drip loop', 'Monsoon evening', 'Rain on tent', 'Soft rain, attic', 'Rainstorm 03', 'Puddle drops, close', 'Rain on skylight', 'Night rain, balcony', 'Spring shower', 'Rain on lake', 'Rainfall loop 96kHz'];
+const BYS = ['klankbeeld', 'InspectorJ', 'Garuda1982', 'lebaston100', 'felix.blume', 'Kyster', 'dobroide', 'vilmuhametshin', 'alemarino', 'Soundrack'];
+const TAGP = ['rain', 'field-recording', 'ambience', 'roof', 'storm', 'loop', 'night', 'water'];
+const CIRC = 703.7;
+function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function hashStr(id) { let h = 7; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
+function seedBars(id, n) {
+  const r = rng(hashStr(id)); const out = [];
+  for (let i = 0; i < n; i++) { const env = 0.55 + 0.45 * Math.sin(i / n * Math.PI); out.push(Math.round((0.18 + r() * 0.82) * env * 100)); }
+  return out;
+}
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const fmt2 = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+/* ---------- code-drawn scenes ---------- */
+const PARTS = {};
+function parts(key) {
+  if (PARTS[key]) return PARTS[key];
+  const r = rng(hashStr(key)), n = (c, f) => Array.from({ length: c }, () => f());
+  const P = {
+    bokeh: n(16, () => ({ x: r(), y: r() * 0.9, r: 0.3 + r() * 0.7, a: 0.08 + r() * 0.16, c: r() < 0.45 ? '226,170,112' : '150,172,212', p: r() * 6 })),
+    streaks: n(150, () => ({ x: r() * 1.15, y: r(), v: 520 + r() * 380, l: 10 + r() * 18 })),
+    drops: n(38, () => ({ x: r(), y: r(), r: 1.4 + r() * 2.8, v: r() < 0.3 ? 14 + r() * 40 : 0 })),
+    clouds: n(8, () => ({ x: r(), y: r() * 0.45, r: 0.25 + r() * 0.3, v: 6 + r() * 10 })),
+    embers: n(70, () => ({ x: r(), v: 0.08 + r() * 0.14, o: r(), p: r() * 6, s: 0.8 + r() * 1.6 })),
+    stars: n(150, () => ({ x: r(), y: r() * 0.6, s: 0.4 + r() * 1.1, f: 0.6 + r() * 1.8, p: r() * 6 })),
+    blades: n(170, () => ({ x: r(), hgt: 30 + r() * 80, p: r() * 6 })),
+    flies: n(14, () => ({ x: r(), y: r(), a: 0.15 + r() * 0.3, b: 0.2 + r() * 0.3, p: r() * 6 })),
+    birds: n(7, () => ({ x: r(), y: 0.15 + r() * 0.6, v: 14 + r() * 18, f: 5 + r() * 4, s: 5 + r() * 5, p: r() * 6 })),
+    motes: n(40, () => ({ x: r(), y: r(), p: r() * 6, v: 3 + r() * 6 })),
+    flow: n(60, () => ({ x: r(), y: 0.2 + r() * 0.75, v: 25 + r() * 55, l: 30 + r() * 90, a: 0.06 + r() * 0.16 })),
+    spark: n(40, () => ({ x: r(), y: 0.25 + r() * 0.7, f: 1 + r() * 3, p: r() * 6 })),
+    sand: n(170, () => ({ x: r(), y: r(), v: 60 + r() * 120, l: 6 + r() * 26, a: 0.05 + r() * 0.15, p: r() * 6 })),
+  };
+  PARTS[key] = P; return P;
+}
+function grad(ctx, h, stops) { const g = ctx.createLinearGradient(0, 0, 0, h); stops.forEach(([o, c]) => g.addColorStop(o, c)); return g; }
+function glow(ctx, x, y, r, rgb, a) { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${rgb},${a})`); g.addColorStop(1, `rgba(${rgb},0)`); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2); }
+function rainLines(ctx, w, h, t, list, slant, alpha) {
+  ctx.strokeStyle = `rgba(200,212,232,${alpha})`; ctx.lineWidth = 1; ctx.beginPath();
+  for (const s of list) { const y = ((s.y * h + t * s.v) % (h + 40)) - 20; const x = s.x * w - y * slant; ctx.moveTo(x, y); ctx.lineTo(x - s.l * slant, y + s.l); }
+  ctx.stroke();
+}
+const SCENES = {
+  rain(ctx, w, h, t, P, k) {
+    ctx.fillStyle = grad(ctx, h, [[0, '#1c2433'], [1, '#10141d']]); ctx.fillRect(0, 0, w, h);
+    const m = Math.min(w, h);
+    for (const b of P.bokeh) glow(ctx, b.x * w, b.y * h, b.r * m * 0.14, b.c, b.a * k * (0.8 + 0.2 * Math.sin(t * 0.5 + b.p)));
+    rainLines(ctx, w, h, t, P.streaks, 0.06, 0.2 * k);
+    for (const d of P.drops) {
+      const y = (d.y * h + t * d.v) % (h + 20) - 10, x = d.x * w;
+      if (d.v) { ctx.strokeStyle = `rgba(210,222,240,${0.07 * k})`; ctx.lineWidth = d.r * 0.7; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 40); ctx.stroke(); }
+      ctx.fillStyle = `rgba(210,222,240,${0.16 * k})`; ctx.beginPath(); ctx.arc(x, y, d.r, 0, 7); ctx.fill();
+      ctx.fillStyle = `rgba(240,245,255,${0.32 * k})`; ctx.beginPath(); ctx.arc(x - d.r * 0.3, y - d.r * 0.3, d.r * 0.35, 0, 7); ctx.fill();
+    }
+  },
+  thunder(ctx, w, h, t, P, k) {
+    const ph = t % 11, f = ph < 0.08 ? 1 : (ph > 0.2 && ph < 0.27) ? 0.6 : 0;
+    ctx.fillStyle = grad(ctx, h, [[0, '#141722'], [1, '#1b1f2b']]); ctx.fillRect(0, 0, w, h);
+    for (const c of P.clouds) { const x = ((c.x * w + t * c.v) % (w + 500)) - 250; glow(ctx, x, c.y * h, c.r * w, f ? '150,160,190' : '70,78,98', (0.45 + f * 0.35) * k); }
+    rainLines(ctx, w, h, t * 1.15, P.streaks, 0.22, 0.24 * k);
+    if (f) { ctx.fillStyle = `rgba(205,214,240,${0.16 * f * k})`; ctx.fillRect(0, 0, w, h); }
+  },
+  beach(ctx, w, h, t, P, k) {
+    const hz = h * 0.52;
+    ctx.fillStyle = grad(ctx, hz, [[0, '#141a29'], [1, '#2a3349']]); ctx.fillRect(0, 0, w, hz);
+    for (const s of P.stars) if (s.y < 0.45) { ctx.fillStyle = `rgba(230,232,240,${(0.15 + 0.3 * (0.5 + 0.5 * Math.sin(t * s.f + s.p))) * k})`; ctx.fillRect(s.x * w, s.y * hz, s.s, s.s); }
+    const mx = w * 0.7, my = hz * 0.42;
+    glow(ctx, mx, my, 90, '232,228,214', 0.18 * k); ctx.fillStyle = 'rgba(232,230,220,0.85)'; ctx.beginPath(); ctx.arc(mx, my, 20, 0, 7); ctx.fill();
+    ctx.fillStyle = grad(ctx, h, [[0, '#1b2a3d'], [0.52, '#1b2a3d'], [1, '#0d151f']]); ctx.fillRect(0, hz, w, h - hz);
+    for (let j = 0; j < 22; j++) { const y = hz + 4 + j * ((h - hz) * 0.7 / 22); const hw = (4 + j * 2.2) * (0.6 + 0.4 * Math.sin(t * 1.6 + j * 1.3)); ctx.fillStyle = `rgba(232,230,220,${(0.22 - j * 0.008) * k})`; ctx.fillRect(mx - hw + Math.sin(t + j) * 3, y, hw * 2, 1.5); }
+    for (let i = 0; i < 16; i++) {
+      const q = i / 16, yy = hz + (h - hz) * Math.pow(q, 1.5) + 4, amp = 1 + i * 0.7;
+      ctx.strokeStyle = `rgba(190,210,230,${(0.04 + 0.12 * q) * k})`; ctx.lineWidth = 1; ctx.beginPath();
+      for (let x = 0; x <= w; x += 10) { const y = yy + Math.sin(x * 0.012 * (1.2 - q * 0.5) + t * (0.5 + q * 0.6) + i) * amp; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.stroke();
+    }
+    const fy = h * 0.9 + Math.sin(t * 0.5) * 10; ctx.strokeStyle = `rgba(220,232,240,${0.22 * k})`; ctx.lineWidth = 1.5; ctx.beginPath();
+    for (let x = 0; x <= w; x += 8) { const y = fy + Math.sin(x * 0.02 + t * 0.8) * 3; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  },
+  fire(ctx, w, h, t, P, k) {
+    ctx.fillStyle = '#120e0c'; ctx.fillRect(0, 0, w, h);
+    const fl = 0.85 + 0.08 * Math.sin(t * 6.1) + 0.05 * Math.sin(t * 13.7) + 0.03 * Math.sin(t * 23.3);
+    glow(ctx, w / 2, h * 0.95, h * 1.05, '214,128,64', 0.26 * fl * k);
+    const base = h * 0.86, fw = Math.min(w * 0.07, 70);
+    for (let i = 0; i < 6; i++) {
+      const cx = w / 2 + (i - 2.5) * fw * 0.75, fh = h * (0.22 + 0.05 * Math.sin(t * 3.1 + i * 1.7) + 0.025 * Math.sin(t * 7.3 + i)) * (i === 2 || i === 3 ? 1.25 : 0.9);
+      ctx.save(); ctx.translate(cx, base); ctx.scale(1, fh / fw);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, fw); g.addColorStop(0, `rgba(255,206,130,${0.55 * k})`); g.addColorStop(0.45, `rgba(232,120,52,${0.3 * k})`); g.addColorStop(1, 'rgba(180,60,30,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, fw, Math.PI, 0); ctx.fill(); ctx.restore();
+    }
+    ctx.fillStyle = '#0a0706';
+    ctx.beginPath(); ctx.roundRect(w / 2 - fw * 3, base - 6, fw * 6, 18, 9); ctx.fill();
+    ctx.save(); ctx.translate(w / 2, base + 6); ctx.rotate(-0.12); ctx.beginPath(); ctx.roundRect(-fw * 2.6, -8, fw * 5.2, 16, 8); ctx.fill(); ctx.restore();
+    ctx.fillStyle = grad(ctx, h, [[0, 'rgba(10,7,6,0)'], [0.9, 'rgba(10,7,6,0)'], [1, '#0a0706']]); ctx.fillRect(0, 0, w, h);
+    for (const e of P.embers) {
+      const age = (t * e.v + e.o) % 1, y = base - age * h * 0.8, x = w / 2 + (e.x - 0.5) * fw * 5 + Math.sin(age * 8 + e.p) * 18;
+      ctx.fillStyle = `rgba(244,170,92,${(1 - age) * 0.75 * k})`; ctx.beginPath(); ctx.arc(x, y, e.s, 0, 7); ctx.fill();
+    }
+  },
+  night(ctx, w, h, t, P, k) {
+    ctx.fillStyle = grad(ctx, h, [[0, '#0e1322'], [1, '#1c2338']]); ctx.fillRect(0, 0, w, h);
+    for (const s of P.stars) { ctx.fillStyle = `rgba(232,234,245,${(0.2 + 0.5 * (0.5 + 0.5 * Math.sin(t * s.f + s.p))) * k})`; ctx.fillRect(s.x * w, s.y * h, s.s, s.s); }
+    ctx.fillStyle = '#0a0e17'; ctx.fillRect(0, h * 0.9, w, h * 0.1);
+    ctx.strokeStyle = '#0a0e17'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.beginPath();
+    for (const b of P.blades) { const x = b.x * w, sway = Math.sin(t * 0.9 + x * 0.02 + b.p) * 6; ctx.moveTo(x, h); ctx.quadraticCurveTo(x, h - b.hgt * 0.6, x + sway, h - b.hgt - h * 0.06); }
+    ctx.stroke();
+    for (const f of P.flies) {
+      const x = f.x * w + Math.sin(t * f.a + f.p) * 50, y = h * (0.5 + f.y * 0.38) + Math.cos(t * f.b + f.p) * 22, a = 0.5 + 0.5 * Math.sin(t * 1.7 + f.p * 3);
+      glow(ctx, x, y, 12, '214,224,140', 0.35 * a * k); ctx.fillStyle = `rgba(236,240,180,${0.8 * a * k})`; ctx.beginPath(); ctx.arc(x, y, 1.3, 0, 7); ctx.fill();
+    }
+  },
+  birds(ctx, w, h, t, P, k) {
+    ctx.fillStyle = grad(ctx, h, [[0, '#222738'], [0.55, '#3d4050'], [1, '#625650']]); ctx.fillRect(0, 0, w, h);
+    glow(ctx, w * 0.22, h * 0.72, h * 0.7, '236,196,150', 0.22 * k);
+    for (let i = 0; i < 5; i++) {
+      const a = (0.03 + 0.015 * Math.sin(t * 0.4 + i)) * k, x0 = w * 0.12 + i * w * 0.11;
+      ctx.fillStyle = `rgba(240,214,176,${a})`; ctx.beginPath(); ctx.moveTo(x0, -10); ctx.lineTo(x0 + w * 0.05, -10); ctx.lineTo(x0 + w * 0.32, h); ctx.lineTo(x0 + w * 0.18, h); ctx.fill();
+    }
+    [['#34343f', 0.66, 30, 0.004], ['#272832', 0.76, 24, 0.007], ['#1a1b23', 0.86, 18, 0.011]].forEach(([c, b, amp, fr], i) => {
+      ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 12) ctx.lineTo(x, h * b + Math.sin(x * fr + i * 2) * amp + Math.sin(x * fr * 2.7 + i) * amp * 0.4);
+      ctx.lineTo(w, h); ctx.fill();
+    });
+    for (const m of P.motes) { const y = (m.y * h - t * m.v + h) % h; ctx.fillStyle = `rgba(245,225,190,${0.18 * (0.5 + 0.5 * Math.sin(t + m.p)) * k})`; ctx.fillRect(m.x * w + Math.sin(t * 0.3 + m.p) * 10, y, 1.5, 1.5); }
+    ctx.strokeStyle = 'rgba(22,22,30,0.75)'; ctx.lineWidth = 1.5;
+    for (const b of P.birds) {
+      const x = ((b.x * w + t * b.v) % (w + 80)) - 40, y = b.y * h * 0.6 + Math.sin(t * 0.5 + b.p) * 8, fl = Math.sin(t * b.f + b.p) * b.s * 0.6;
+      ctx.beginPath(); ctx.moveTo(x - b.s, y - fl); ctx.quadraticCurveTo(x - b.s * 0.4, y - fl * 0.2, x, y); ctx.quadraticCurveTo(x + b.s * 0.4, y - fl * 0.2, x + b.s, y - fl); ctx.stroke();
+    }
+  },
+  stream(ctx, w, h, t, P, k) {
+    ctx.fillStyle = grad(ctx, h, [[0, '#162320'], [1, '#0d1614']]); ctx.fillRect(0, 0, w, h);
+    glow(ctx, w * 0.6, h * 0.15, w * 0.5, '170,210,200', 0.07 * k);
+    for (const l of P.flow) {
+      const x = ((l.x * w + t * l.v) % (w + 200)) - 100, y = l.y * h + Math.sin(t * 0.8 + l.x * 10) * 2;
+      ctx.strokeStyle = `rgba(180,218,208,${l.a * k})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + l.l / 2, y - 3 - l.a * 10, x + l.l, y); ctx.stroke();
+    }
+    for (const s of P.spark) { const a = Math.max(0, Math.sin(t * s.f + s.p)); ctx.fillStyle = `rgba(230,245,240,${0.5 * a * a * k})`; ctx.fillRect(s.x * w, s.y * h, 1.6, 1.6); }
+    ctx.fillStyle = '#0a110f';
+    [[0.18, 0.92, 70, 18], [0.42, 0.97, 110, 22], [0.78, 0.9, 80, 16], [0.92, 0.99, 120, 26]].forEach(([x, y, rx, ry]) => { ctx.beginPath(); ctx.ellipse(x * w, y * h, rx, ry, 0, 0, 7); ctx.fill(); });
+  },
+  desert(ctx, w, h, t, P, k) {
+    ctx.fillStyle = grad(ctx, h, [[0, '#24232d'], [0.55, '#4b3e40'], [1, '#76594a']]); ctx.fillRect(0, 0, w, h);
+    glow(ctx, w * 0.62, h * 0.6, h * 0.5, '226,170,120', 0.28 * k);
+    ctx.fillStyle = 'rgba(226,176,128,0.55)'; ctx.beginPath(); ctx.arc(w * 0.62, h * 0.6, 34, 0, 7); ctx.fill();
+    [['#4a3a38', 0.62, 26, 0.006], ['#3a2e30', 0.74, 34, 0.004], ['#2a2226', 0.86, 22, 0.008]].forEach(([c, b, amp, fr], i) => {
+      ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 12) ctx.lineTo(x, h * b + Math.sin(x * fr + i * 1.4) * amp);
+      ctx.lineTo(w, h); ctx.fill();
+    });
+    ctx.lineWidth = 1;
+    for (const s of P.sand) { const x = ((s.x * w + t * s.v) % (w + 60)) - 30, y = h * (0.4 + s.y * 0.6) + Math.sin(t + s.p) * 3; ctx.strokeStyle = `rgba(230,204,172,${s.a * k})`; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + s.l, y - s.l * 0.04); ctx.stroke(); }
+  },
+  fallback(ctx, w, h, t, P, k, tint) {
+    ctx.fillStyle = grad(ctx, h, [[0, tint], [1, '#161826']]); ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < 3; i++) glow(ctx, w * (0.25 + i * 0.25) + Math.sin(t * 0.2 + i * 2) * 60, h * (0.4 + 0.1 * Math.cos(t * 0.25 + i)), h * 0.6, '233,233,237', 0.04 * k);
+    for (let j = 0; j < 3; j++) {
+      ctx.strokeStyle = `rgba(233,233,237,${(0.16 - j * 0.04) * k})`; ctx.lineWidth = 1.2; ctx.beginPath();
+      for (let x = 0; x <= w; x += 6) { const y = h * 0.45 + Math.sin(x * 0.015 + t * (0.8 + j * 0.3) + j) * (18 - j * 4) * Math.sin(x / w * Math.PI) + Math.sin(x * 0.041 - t * 1.3) * 6; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.stroke();
+    }
+  },
+};
+
+class Component extends DCLogic {
+  canvasRef = React.createRef();
+  heroRef = React.createRef();
+  sceneT = 0;
+  state = {
+    screen: this.props.screen ?? 'home',
+    current: ENVS[0], lastPlayed: ENVS[0], playing: false, pos: 42, loop: true, vol: 70,
+    total: 1500, left: 1500, running: false, started: false,
+    filter: '', signedIn: true, authMode: 'login', user: 'atmporkandbeans',
+    added: [], savedIds: {}, saveOpen: null, saveName: '',
+    query: 'rain', submitted: 'rain', page: 1,
+  };
+  componentDidMount() {
+    this.iv = setInterval(() => this.tick(), 1000);
+    let last = performance.now();
+    const loop = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (this.state.playing || this.props.animateWhenPaused) this.sceneT += dt;
+      const hero = this.heroRef.current;
+      if (hero) {
+        const fx = this.props.heroEffect ?? 'sticky + parallax';
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        const p = Math.max(0, Math.min(1, y / 380));
+        hero.style.position = fx === 'none' ? 'static' : 'sticky';
+        if (fx === 'sticky + parallax') {
+          hero.style.transform = `translateY(${(-p * 36).toFixed(1)}px) scale(${(1 - p * 0.05).toFixed(3)})`;
+          hero.style.opacity = (1 - p * 0.85).toFixed(3);
+        } else { hero.style.transform = ''; hero.style.opacity = ''; }
+      }
+      const c = this.canvasRef.current;
+      if (c && c.clientWidth) {
+        const w = c.clientWidth, h = c.clientHeight, dpr = window.devicePixelRatio || 1;
+        if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+        const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const cur = this.state.current, key = SCENE_OF[cur.id] || 'fallback';
+        try { SCENES[key](ctx, w, h, this.sceneT, parts(key), this.props.intensity ?? 1, catOf(cur).tint); } catch (e) {}
+      }
+      this.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+  componentWillUnmount() { clearInterval(this.iv); cancelAnimationFrame(this.raf); }
+  componentDidUpdate(prev) { if (prev.screen !== this.props.screen && this.props.screen) this.setState({ screen: this.props.screen }); }
+  tick() {
+    this.setState(s => {
+      const n = {};
+      if (s.playing) { let p = s.pos + 1; if (p >= s.current.dur) { if (s.loop) p = 0; else { p = s.current.dur; n.playing = false; } } n.pos = p; }
+      if (s.running) { const l = s.left - 1; if (l <= 0) { n.left = 0; n.running = false; n.playing = false; } else n.left = l; }
+      return n;
+    });
+  }
+  play(snd) { this.setState(s => s.current.id === snd.id ? { playing: !s.playing } : { current: snd, pos: 0, playing: true, lastPlayed: ENVS.includes(snd) ? snd : s.lastPlayed }); }
+  open(snd) { this.setState(s => s.current.id === snd.id ? {} : { current: snd, pos: 0, lastPlayed: ENVS.includes(snd) ? snd : s.lastPlayed }); this.go('env'); }
+  go(screen) { this.setState({ screen }); window.scrollTo && window.scrollTo(0, 0); }
+  results() {
+    const out = [];
+    for (let p = 1; p <= this.state.page; p++) {
+      const n = p === 12 ? 16 : 20;
+      for (let i = 0; i < n; i++) {
+        const k = (i + (p - 1) * 7) % 20;
+        out.push({ id: `r${p}-${i}`, name: NAMES[k] + (p > 1 ? ` (${p})` : ''), by: BYS[(i * 3 + p) % BYS.length], tags: (() => { const a = (i + p) % 8; let b = (i * 5 + 2) % 8; if (b === a) b = (b + 3) % 8; return [TAGP[a], TAGP[b]]; })(), dur: 40 + ((i * 37 + p * 11) % 280) });
+      }
+    }
+    return out;
+  }
+  // Mirrors SoundSearch.jsx: an IntersectionObserver on a bottom sentinel bumps the page when it scrolls into view.
+  sentinelRef = el => {
+    if (this.io) { this.io.disconnect(); this.io = null; }
+    if (!el) return;
+    this.io = new IntersectionObserver(entries => {
+      const s = this.state;
+      if (entries[0].isIntersecting && s.page < 12 && !s.loadingMore) {
+        this.setState({ loadingMore: true });
+        clearTimeout(this.lt);
+        this.lt = setTimeout(() => this.setState(st => ({ page: Math.min(12, st.page + 1), loadingMore: false }), () => { if (this.io && el.isConnected) { this.io.unobserve(el); this.io.observe(el); } }), 800);
+      }
+    }, { threshold: 0.1 });
+    this.io.observe(el);
+  };
+  renderVals() {
+    const s = this.state, cur = s.current, curCat = catOf(cur);
+    const isCur = id => cur.id === id && s.playing;
+    const f = s.filter.trim().toLowerCase();
+    const matches = ENVS.filter(e => !f || e.name.toLowerCase().includes(f) || e.tags.some(t => t.toLowerCase().includes(f)));
+    const featured = !f ? s.lastPlayed : null;
+    const order = featured ? [featured, ...ENVS.filter(e => e.id !== featured.id)] : matches;
+    const tiles = order.map(e => {
+      const c = catOf(e), big = featured && e.id === featured.id;
+      return {
+        ...e, featured: !!big, icon: c.icon, tint: c.tint,
+        span: big ? 'span 2' : 'span 1', pad: big ? '24px' : '18px',
+        nameSize: big ? 'clamp(36px,4vw,52px)' : '22px', iconBox: big ? '44px' : '36px', iconSize: big ? '20px' : '16px',
+        tagList: e.tags.slice(0, 4).map(t => ({ t })),
+        ring: isCur(e.id) ? '0 0 0 1px var(--accent)' : '0 0 0 1px var(--line)',
+        onOpen: () => this.open(e),
+      };
+    });
+    const savedList = [...SAVED, ...s.added];
+    const savedTiles = savedList.map(e => { const c = catOf(e); return { ...e, tint: c.tint, icon: c.icon, catLabel: c.label, durLabel: fmt(e.dur), ring: cur.id === e.id ? '0 0 0 1px var(--accent)' : 'none', onOpen: () => this.open(e) }; });
+    const ratio = cur.dur ? s.pos / cur.dur : 0;
+    const started = s.started, done = started && s.left === 0, active = started && s.left > 0;
+    const endAt = new Date(Date.now() + s.left * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const results = this.results().map(r => {
+      const saved = !!s.savedIds[r.id];
+      return {
+        ...r, durLabel: fmt(r.dur), tagList: r.tags.map(t => ({ t })),
+        icon: isCur(r.id) ? 'ph-pause' : 'ph-play',
+        btnBg: isCur(r.id) ? 'color-mix(in srgb, var(--accent) 16%, transparent)' : 'transparent',
+        rowBg: cur.id === r.id ? 'color-mix(in srgb, var(--accent) 6%, transparent)' : 'transparent',
+        open: s.saveOpen === r.id,
+        saveLabel: saved ? 'Saved' : 'Save', saveIcon: saved ? 'ph-fill ph-bookmark-simple' : 'ph ph-bookmark-simple',
+        saveColor: saved ? 'var(--accent)' : 'var(--text)',
+        onPlay: () => this.play(r),
+        onSave: () => { if (!s.signedIn) return this.go('login'); if (saved) return; this.setState({ saveOpen: r.id, saveName: r.name }); },
+      };
+    });
+    const pg = s.page;
+    const pageNums = pg <= 3 ? [1, 2, 3, 4, 5] : pg >= 10 ? [8, 9, 10, 11, 12] : [pg - 2, pg - 1, pg, pg + 1, pg + 2];
+    const pages = [...pageNums.map(n => ({ n, label: String(n) })), ...(pageNums.includes(12) ? [] : [{ n: null, label: '…' }, { n: 12, label: '12' }])]
+      .map(p => ({ ...p, border: p.n === pg ? 'var(--accent)' : 'transparent', color: p.n === pg ? 'var(--accent)' : 'var(--muted)', onPick: () => p.n && this.setState({ page: p.n }) }));
+    const tab = (k, label) => ({ label, onPick: () => this.go(k), color: s.screen === k ? '#101114' : '#c9c9cf', bg: s.screen === k ? '#e6e6ea' : 'transparent' });
+    const curated = !!SCENE_OF[cur.id];
+
+    return {
+      themeVars: (() => { const fp = FONT_PAIRS.find(x => x.key === (s.fontPair ?? this.props.fontPair)) || FONT_PAIRS[5]; return { ...VARS, '--fh': fp.fh, '--fb': fp.fb, '--fm': fp.fm, '--hw': fp.hw }; })(),
+      fontOpts: FONT_PAIRS.map(fp => { const on = fp.key === ((s.fontPair ?? this.props.fontPair) || 'bricolage'); return { ...fp, onPick: () => this.setState({ fontPair: fp.key }), border: on ? '1px solid #c9c9cf' : '1px solid #2a2b31', bg: on ? '#1d1e24' : 'transparent' }; }),
+      showControls: this.props.showControls ?? true,
+      screenTabs: [tab('home', 'Home'), tab('env', 'Environment'), tab('search', 'Search'), tab('login', 'Login')],
+      navItems: [['home', 'Home'], ['search', 'Search'], ['about', 'About']].map(([k, label]) => ({ label, onPick: () => k !== 'about' && this.go(k), color: s.screen === k ? 'var(--text)' : 'var(--muted)', mark: s.screen === k ? 1 : 0 })),
+      isHome: s.screen === 'home', isEnv: s.screen === 'env', isSearch: s.screen === 'search', isLogin: s.screen === 'login',
+      showMini: s.screen !== 'login',
+      signedIn: s.signedIn, signedOut: !s.signedIn, user: s.user,
+      goHome: () => this.go('home'), goSearch: () => this.go('search'), goLogin: () => this.go('login'), goEnv: () => this.go('env'),
+      logout: () => this.setState({ signedIn: false }),
+      tiles, featuredLabel: s.playing && featured && cur.id === featured.id ? 'Now playing' : 'Last played',
+      showMoreTile: !f, noEnvs: matches.length === 0,
+      envCount: `${matches.length} of ${ENVS.length}`,
+      savedTiles, savedCount: savedList.length,
+      canvasRef: this.canvasRef, heroRef: this.heroRef,
+      sceneKicker: curated ? `Immersive soundscape · ${curCat.label}` : `Saved sound · ${curCat.label}`,
+      sceneState: s.playing ? 'Scene live' : 'Scene resting — press play',
+      sceneDot: s.playing ? 'var(--accent)' : 'var(--color-neutral-500)',
+      cur, curTags: cur.tags.slice(0, 4).map(t => ({ t })), curTint: curCat.tint, curIcon: curCat.icon,
+      playIcon: s.playing ? 'ph-pause' : 'ph-play',
+      togglePlay: () => this.setState(st => ({ playing: !st.playing, pos: st.pos >= st.current.dur ? 0 : st.pos })),
+      posLabel: fmt(s.pos), durLabel: fmt(cur.dur), progressPct: (ratio * 100).toFixed(2) + '%',
+      bigBars: seedBars(cur.id, 64).map((h, i) => ({ h: h + '%', c: i / 64 < ratio ? 'var(--accent)' : 'color-mix(in srgb, var(--text) 18%, transparent)', onSeek: () => this.setState({ pos: Math.floor(i / 64 * cur.dur) }) })),
+      toggleLoop: () => this.setState(st => ({ loop: !st.loop })),
+      loopColor: s.loop ? 'var(--accent)' : 'var(--muted)', loopLabel: s.loop ? 'Loop on' : 'Loop off',
+      vol: s.vol, onVol: e => this.setState({ vol: Number(e.target.value) }),
+      filter: s.filter, onFilter: e => this.setState({ filter: e.target.value }),
+      timerIdle: !started, timerActive: active, timerDone: done, timerNotDone: !done,
+      timerLabel: fmt2(started ? s.left : s.total),
+      timerSub: !started ? `${s.total / 60} minutes` : s.running ? `Stops at ${endAt}` : 'Paused',
+      timerTag: done ? 'Complete' : s.running ? 'Running' : started ? 'Paused' : 'Off',
+      timerTagColor: s.running ? 'var(--accent)' : 'var(--muted)',
+      ringOffset: started ? (CIRC * (1 - s.left / s.total)).toFixed(1) : (CIRC * (1 - Math.min(s.total, 3600) / 3600)).toFixed(1),
+      presets: [15, 25, 45, 60].map(m => ({ label: m + 'm', border: s.total === m * 60 ? 'var(--accent)' : 'var(--line)', color: s.total === m * 60 ? 'var(--accent)' : 'var(--text)', onPick: () => this.setState({ total: m * 60, left: m * 60 }) })),
+      minus5: () => this.setState(st => { const t = Math.max(300, st.total - 300); return { total: t, left: t }; }),
+      plus5: () => this.setState(st => { const t = Math.min(7200, st.total + 300); return { total: t, left: t }; }),
+      startTimer: () => this.setState(st => ({ started: true, running: true, left: st.total, playing: true })),
+      pauseTimer: () => this.setState(st => ({ running: !st.running })),
+      pauseLabel: s.running ? 'Pause' : 'Resume',
+      cancelTimer: () => this.setState(st => ({ started: false, running: false, left: st.total })),
+      miniTimer: active ? fmt2(s.left) + (s.running ? '' : ' ‖') : done ? 'Done' : 'Timer',
+      miniTimerColor: active ? 'var(--accent)' : 'var(--text)',
+      query: s.query, onQuery: e => this.setState({ query: e.target.value }),
+      runSearch: () => { clearTimeout(this.lt); this.setState(st => ({ submitted: st.query.trim() || 'rain', page: 1, loadingMore: false })); },
+      submitted: s.submitted, results,
+      sentinelRef: this.sentinelRef, loadingMore: !!s.loadingMore, reachedEnd: pg >= 12,
+      skeletons: [{ w: '62%' }, { w: '48%' }, { w: '70%' }],
+      loadedLabel: String(results.length),
+      saveName: s.saveName, onSaveName: e => this.setState({ saveName: e.target.value }),
+      cancelSave: () => this.setState({ saveOpen: null, saveName: '' }),
+      confirmSave: () => {
+        const r = this.results().find(x => x.id === s.saveOpen); if (!r || !s.saveName.trim()) return;
+        this.setState(st => ({ added: [...st.added, { ...r, id: 'saved-' + r.id, name: st.saveName.trim() }], savedIds: { ...st.savedIds, [r.id]: true }, saveOpen: null, saveName: '' }));
+      },
+      setLogin: () => this.setState({ authMode: 'login' }), setSignup: () => this.setState({ authMode: 'signup' }),
+      loginTabColor: s.authMode === 'login' ? 'var(--accent)' : 'var(--muted)', signupTabColor: s.authMode === 'signup' ? 'var(--accent)' : 'var(--muted)',
+      loginTabRing: s.authMode === 'login' ? 'inset 0 0 0 1px var(--accent)' : 'none', signupTabRing: s.authMode === 'signup' ? 'inset 0 0 0 1px var(--accent)' : 'none',
+      onUser: e => this.setState({ user: e.target.value }),
+      authCta: s.authMode === 'login' ? 'Log in' : 'Create account',
+      authNote: s.authMode === 'login' ? 'New here? Switch to Sign up — it takes a username and a password.' : 'Usernames are unique. You can start saving sounds right away.',
+      submitAuth: () => { this.setState({ signedIn: true }); this.go('home'); },
+    };
+  }
+}
+</script>
+</body>
+</html>
