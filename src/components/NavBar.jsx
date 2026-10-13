@@ -1,91 +1,64 @@
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import Logo from "./Logo";
 import styles from "../styles/NavBar.module.css";
-import ambientLogoNav from "../assets/ambient_logo_nav.svg";
+
+const LINKS = [
+  { to: "/", label: "Home", end: true },
+  { to: "/search", label: "Search" },
+  { to: "/about", label: "About" },
+];
 
 function NavBar() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   function handleLogout() {
     logout().then(() => navigate("/"));
   }
 
-  function closeMenu() {
-    setMenuOpen(false);
-  }
-
   return (
     <header className={styles.header}>
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          <img src={ambientLogoNav} alt="Ambient" className={styles.logoImg} />
-        </div>
+      <div className={styles.inner}>
+        <Link to="/" className={styles.brand}>
+          <Logo size={30} />
+          <span className={styles.wordmark}>Ambient</span>
+        </Link>
 
-        <button
-          className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ""}`}
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-
-        <div className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ""}`}>
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              isActive ? styles.activeLink : styles.link
-            }
-            onClick={closeMenu}
-          >
-            Home
-          </NavLink>
-
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              isActive ? styles.activeLink : styles.link
-            }
-            onClick={closeMenu}
-          >
-            About
-          </NavLink>
-
-          <NavLink
-            to="/search"
-            className={({ isActive }) =>
-              isActive ? styles.activeLink : styles.link
-            }
-            onClick={closeMenu}
-          >
-            Search
-          </NavLink>
-
-          {user ? (
-            <div className={styles.authSection}>
-              <span className={styles.username}>Hi, {user.username}</span>
-              <button className={styles.logoutButton} onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
-          ) : (
+        <nav className={styles.links}>
+          {LINKS.map((l) => (
             <NavLink
-              to="/login"
+              key={l.to}
+              to={l.to}
+              end={l.end}
               className={({ isActive }) =>
-                isActive ? styles.activeLink : styles.link
+                isActive ? `${styles.link} ${styles.active}` : styles.link
               }
-              onClick={closeMenu}
             >
-              Login / Sign Up
+              {l.label}
             </NavLink>
-          )}
-        </div>
-      </nav>
+          ))}
+        </nav>
+
+        {user ? (
+          <div className={styles.account}>
+            <span className={styles.user}>
+              <span className={styles.avatar} aria-hidden="true">
+                {user.username?.[0]?.toUpperCase()}
+              </span>
+              <span className={styles.username}>{user.username}</span>
+            </span>
+            <button className={styles.logout} onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
+        ) : (
+          <button className={styles.signIn} onClick={() => navigate("/login")}>
+            Sign in
+          </button>
+        )}
+      </div>
+      <div className={styles.rule} />
     </header>
   );
 }

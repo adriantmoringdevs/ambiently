@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import NavBar from "../components/NavBar";
 import AudioPlayer from "../components/AudioPlayer";
 import SleepTimer from "../components/SleepTimer";
 import Countdown from "../components/Countdown";
@@ -36,7 +35,6 @@ function SoundEnvironment() {
   if (!data)
     return (
       <>
-        <NavBar />
 
         <main className={styles.emptyState}>
           <h1>Sound not found.</h1>
@@ -50,7 +48,6 @@ function SoundEnvironment() {
 
   return (
     <>
-      <NavBar />
 
       <main className={styles.main}>
         <div className={styles.backgroundGlow}></div>

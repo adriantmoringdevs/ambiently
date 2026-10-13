@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBar";
 import SoundCard from "../components/SoundCard";
 import styles from "../styles/Home.module.css";
 import { useAudio } from "../context/AudioContext";
@@ -30,7 +29,6 @@ function Home() {
 
   return (
     <>
-      <NavBar />
 
       <main className={styles.main}>
         <div className={styles.overlay}></div>

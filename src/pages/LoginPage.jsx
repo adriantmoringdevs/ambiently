@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import NavBar from "../components/NavBar";
 import styles from "../styles/LoginPage.module.css";
 
 function LoginPage() {
@@ -30,7 +29,6 @@ function LoginPage() {
 
   return (
     <>
-      <NavBar />
       <div className={styles.main}>
         <div className={styles.glow}></div>
         <div className={styles.container}>

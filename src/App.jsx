@@ -4,6 +4,7 @@ import About from "./pages/About"
 import SoundEnviroment from './pages/SoundEnviroment'
 import SoundSearch from "./pages/SoundSearch"
 import LoginPage from "./pages/LoginPage"
+import NavBar from "./components/NavBar"
 import { AudioProvider } from "./context/AudioContext"
 import { UserProvider } from "./context/UserContext"
 
@@ -13,6 +14,8 @@ function App() {
     <UserProvider>
     <AudioProvider>
     <BrowserRouter basename="/">
+    <NavBar />
+    <main style={{ flex: 1, width: "100%" }}>
     <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
@@ -20,6 +23,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/search" element={<SoundSearch />} />
     </Routes>
+    </main>
     </BrowserRouter>
     </AudioProvider>
     </UserProvider>

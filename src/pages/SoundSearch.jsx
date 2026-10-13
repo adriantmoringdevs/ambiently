@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import SearchResultCard from "../components/SearchResultCard";
 import AudioPlayer from "../components/AudioPlayer";
-import NavBar from "../components/NavBar";
 import { useAudio } from "../context/AudioContext";
 import styles from "../styles/SoundSearch.module.css";
 
@@ -72,7 +71,6 @@ function SoundSearch() {
 
   return (
     <>
-      <NavBar />
 
       <main className={styles.main}>
         <div className={styles.glow}></div>

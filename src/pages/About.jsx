@@ -1,10 +1,8 @@
-import NavBar from "../components/NavBar";
 import styles from "../styles/About.module.css";
 
 function About() {
   return (
     <>
-      <NavBar />
 
       <main className={styles.main}>
         <div className={styles.glow}></div>
