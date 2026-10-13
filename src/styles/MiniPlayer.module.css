@@ -150,7 +150,6 @@
 
 @media (max-width: 640px) {
   .row {
-    padding: 0 16px;
     gap: 10px;
   }
 

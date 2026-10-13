@@ -100,7 +100,7 @@ function Home() {
               aria-label="Filter environments"
             />
           </div>
-          {!loading && (
+          {!loading && !loadError && (
             <span className={styles.count}>
               {matches.length} of {curatedSounds.length}
             </span>
@@ -112,7 +112,7 @@ function Home() {
         <section>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Environments</h2>
-            {!loading && (
+            {!loading && !loadError && (
               <span className={styles.count}>Curated · {curatedSounds.length} spaces</span>
             )}
           </div>

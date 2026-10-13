@@ -114,7 +114,6 @@
 
 @media (max-width: 720px) {
   .inner {
-    padding: 0 16px;
     gap: 12px;
   }
 

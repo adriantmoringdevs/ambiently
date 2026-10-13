@@ -115,8 +115,6 @@
 
 @media (max-width: 640px) {
   .page {
-    padding-left: 16px;
-    padding-right: 16px;
     gap: 32px;
   }
 

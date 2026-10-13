@@ -66,7 +66,15 @@
   --rule: linear-gradient(to right, transparent, var(--color-divider) 48px,
     var(--color-divider) calc(100% - 48px), transparent);
 
+  --gutter: 32px;
+
   color-scheme: dark;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }

@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 1224px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding-inline: var(--gutter);
 }
 
 /* Rules fade at both ends. */
