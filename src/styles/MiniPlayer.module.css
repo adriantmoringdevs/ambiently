@@ -1,0 +1,161 @@
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -1px 0 var(--color-divider);
+}
+
+.track {
+  position: relative;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--color-accent);
+}
+
+.row {
+  composes: container from "./shared.module.css";
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.play {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.play:hover {
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+.tint {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  color: var(--color-neutral-200);
+}
+
+.meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.name,
+.by {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.by {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.meta:hover .name {
+  color: var(--color-accent);
+}
+
+.time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+}
+
+.timer:hover {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+.loop {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  color: var(--color-muted);
+  display: grid;
+  place-items: center;
+}
+
+.loop:hover {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+.timer.on,
+.loop.on {
+  color: var(--color-accent);
+}
+
+@media (max-width: 640px) {
+  .row {
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  .tint,
+  .time {
+    display: none;
+  }
+}

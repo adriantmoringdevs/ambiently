@@ -5,6 +5,7 @@ import SoundEnviroment from './pages/SoundEnviroment'
 import SoundSearch from "./pages/SoundSearch"
 import LoginPage from "./pages/LoginPage"
 import NavBar from "./components/NavBar"
+import MiniPlayer from "./components/MiniPlayer"
 import { AudioProvider } from "./context/AudioContext"
 import { UserProvider } from "./context/UserContext"
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/search" element={<SoundSearch />} />
     </Routes>
     </main>
+    <MiniPlayer />
     </BrowserRouter>
     </AudioProvider>
     </UserProvider>
