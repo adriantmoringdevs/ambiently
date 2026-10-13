@@ -11,16 +11,16 @@ import {
   Wind,
 } from "@phosphor-icons/react";
 
-// Curated Freesound id -> code-drawn scene (see server/app.py CURATED_SOUNDS).
-export const CURATED_SCENES = {
-  126152: "beach",
-  467129: "fire",
-  346562: "rain",
-  265567: "night",
-  410742: "birds",
-  577846: "thunder",
-  733199: "stream",
-  156414: "desert",
+// Curated Freesound id -> display name and code-drawn scene (see server/app.py CURATED_SOUNDS).
+export const CURATED = {
+  126152: { name: "Beach", scene: "beach" },
+  467129: { name: "Fireplace", scene: "fire" },
+  346562: { name: "Rain", scene: "rain" },
+  265567: { name: "Crickets", scene: "night" },
+  410742: { name: "Birds", scene: "birds" },
+  577846: { name: "Thunderstorm", scene: "thunder" },
+  733199: { name: "Stream", scene: "stream" },
+  156414: { name: "Desert Wind", scene: "desert" },
 };
 
 // Category tints, icons and labels. Order matters: first regex match wins.
@@ -49,10 +49,11 @@ export function catOf(track) {
 
 // Normalise a Freesound API payload into the shape the player works with.
 export function toTrack(data, name) {
-  const sceneKey = CURATED_SCENES[data.id] ?? null;
+  const curated = CURATED[data.id];
+  const sceneKey = curated?.scene ?? null;
   return {
     id: data.id,
-    name: name || data.custom_name || data.name,
+    name: name || data.custom_name || curated?.name || data.name,
     by: data.username ?? "",
     tags: data.tags ?? [],
     duration: data.duration ?? 0,

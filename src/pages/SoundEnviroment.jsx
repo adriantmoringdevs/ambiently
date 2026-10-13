@@ -30,13 +30,17 @@ function SoundEnvironment() {
   const [fetched, setFetched] = useState({ id: null, track: null, error: false });
 
   // Prefer what's already loaded, then router state, then a fetch (deep links).
+  const savedName = savedSounds.find((s) => s.freesound_id === soundId)?.name;
   let track = null;
   if (current?.id === soundId) track = current;
   else if (state?.sound?.id === soundId) track = toTrack(state.sound, state.name);
   else if (fetched.id === soundId) track = fetched.track;
+  // A saved sound shows the name the user gave it.
+  if (track && savedName && !track.curated && track.name !== savedName) {
+    track = { ...track, name: savedName };
+  }
 
   const needsFetch = !track && fetched.id !== soundId;
-  const savedName = savedSounds.find((s) => s.freesound_id === soundId)?.name;
 
   useEffect(() => {
     if (!needsFetch) return;
@@ -47,7 +51,7 @@ function SoundEnvironment() {
         return r.json();
       })
       .then((data) => {
-        if (!cancelled) setFetched({ id: soundId, track: toTrack(data, savedName), error: false });
+        if (!cancelled) setFetched({ id: soundId, track: toTrack(data), error: false });
       })
       .catch(() => {
         if (!cancelled) setFetched({ id: soundId, track: null, error: true });
@@ -55,7 +59,7 @@ function SoundEnvironment() {
     return () => {
       cancelled = true;
     };
-  }, [needsFetch, soundId, savedName]);
+  }, [needsFetch, soundId]);
 
   // Entering an environment makes it the current sound.
   const openTrack = useEffectEvent((t) => audio.open(t));

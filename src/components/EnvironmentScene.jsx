@@ -17,7 +17,9 @@ function EnvironmentScene({ sceneKey, tint, playing, intensity = 1, className })
   useEffect(() => {
     const canvas = canvasRef.current;
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    let t = 0;
+    // Start a few seconds in so a resting scene isn't frozen on its first frame
+    // (t = 0 lands inside the storm scene's lightning flash).
+    let t = 3;
     let last = performance.now();
     let raf = 0;
 
